@@ -1,100 +1,98 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./css/style.css">
-    <title>Calculator T S </title>
+<title>Calculator TS</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div><img id="icon" src="./css/img/sun.png"></div>
-
-    <div class="container">
-        <form class="container_screen" action="">
-            <input class="screen" type="text" name="screen" id="screen">
-            <p class="underscreen" id="screenunder"></p>
-        </form>
-        <div class="contrainer_button">
-            <button class="button " id="C">
-                AC
-            </button>
-
-            <button class="button" id="mod">
-                <img class="modulo" src="./css/img/Vectors/mod_dark.svg">
-            </button>
-
-            <button class="button" id="division">
-                <img class="division" src="./css/img/Vectors/div_dark.svg">
-            </button>
-          
-            <button class="button" id="nmr7">
-                7
-            </button>
-
-            <button class="button" id="nmr8">
-                8
-            </button>
-
-            <button class="button" id="nmr9">
-                9
-            </button>
-
-            <button class="button" id="mult">
-                <img class="multiplication" src="./css/img/Vectors/mul_dark.svg">
-            </button>
-
-            <button class="button" id="nmr4">
-                4
-            </button>
-
-            <button class="button" id="nmr5">
-                5
-            </button>
-
-            <button class="button" id="nmr6">
-                6
-            </button>
-
-            <button class="button" id="subt">
-                <img class="subtraction" src="./css/img/Vectors/sub_dark.svg">
-            </button>
-
-            <button class="button" id="nmr1">
-                1
-            </button>
-
-            <button class="button" id="nmr2">
-                2
-            </button>
-
-            <button class="button" id="nmr3">
-                3
-            </button>
-
-            <button class="button" id="sum">
-                <img class="addition" src="./css/img/Vectors/add_dark.svg">
-            </button>            
-
-            <button class="button" id="nmr0">
-                0
-            </button>
-
-            <button class="button" id="point">
-                <img class="dot" src="./css/img/Vectors/dot_dark.svg">
-            </button>
-
-            <button class="button" id="del">
-                <img class="deleteCharacter" src="./css/img/Vectors/ce_dark.svg">
-            </button>
-
-            <button class="button" id="equal">
-                <img class="equals" src="./css/img/Vectors/equals_dark.svg">
-            </button>
-        </div>
+  <div class="container">
+    
+    <div class="container_screen">
+      <input class="screen" type="text" name="screen" id="screen"> 
+      <p class="underscreen" id="screenunder"></p>
     </div>
-    <script src="src/main.ts"></script>
-    <script src="./js/theme.js" ></script>
+
+    <div class="contrainer_button">
+      <button class="button" id="AC">
+          AC
+      </button>
+
+      <button class="button" id="modulus">
+        <img id="modulusIcon">
+      </button>
+
+      <button class="button" id="division">
+        <img id="divisionIcon">
+      </button>
+
+      <button class="button" id="numberSeven">
+        7
+      </button>
+
+      <button class="button" id="numberEight">
+        8
+      </button>
+
+      <button class="button" id="numberNine">
+        9
+      </button>
+
+      <button class="button" id="multiplication">
+        <img id="multiplicationIcon">
+      </button>
+
+      <button class="button" id="numberFour">
+        4
+      </button>
+
+      <button class="button" id="numberFive">
+        5
+      </button>
+
+      <button class="button" id="numberSix">
+        6
+      </button>
+
+      <button class="button" id="subtraction">
+        <img id="subtractionIcon">
+      </button>
+
+      <button class="button" id="numberOne">
+        1
+      </button>
+
+      <button class="button" id="numberTwo">
+        2
+      </button>
+
+      <button class="button" id="numberThree">
+        3
+      </button>
+
+      <button class="button" id="addition">
+        <img id="additionIcon">
+      </button>
+
+      <button class="button" id="numberZero">
+        0
+      </button>
+
+      <button class="button" id="point">
+        <img id="pointIcon">
+      </button>
+
+      <button class="button" id="delete">
+        <img id="deleteIcon">
+      </button>
+
+      <button class="button" id="equal">
+        <img id="equalIcon">
+      </button>
+
+    </div>
+
+  </div>
+
+  <script src="index.ts"></script>
 </body>
 </html>
