@@ -8,8 +8,8 @@
   <div class="container">
     
     <div class="container_screen">
-      <input class="screen" type="text" name="screen" id="screen"> 
-      <p class="underscreen" id="screenunder"></p>
+      <input  type="form" id="equationField" class="screen display" readonly="readonly" /><br>
+      <input  type="form" id="answerField" class="outputscreen display" readonly="readonly" /> 
     </div>
 
     <div class="contrainer_button">
@@ -17,75 +17,75 @@
           AC
       </button>
 
-      <button class="button" id="modulus">
+      <button class="button operation" id="modulo">
         <img id="modulusIcon">
       </button>
 
-      <button class="button" id="division">
+      <button class="button operation" id="divide">
         <img id="divisionIcon">
       </button>
 
-      <button class="button" id="numberSeven">
+      <button class="button number" id="num7">
         7
       </button>
 
-      <button class="button" id="numberEight">
+      <button class="button number" id="num8">
         8
       </button>
 
-      <button class="button" id="numberNine">
+      <button class="button number" id="num9">
         9
       </button>
 
-      <button class="button" id="multiplication">
+      <button class="button operation" id="multiply">
         <img id="multiplicationIcon">
       </button>
 
-      <button class="button" id="numberFour">
+      <button class="button number" id="num4">
         4
       </button>
 
-      <button class="button" id="numberFive">
+      <button class="button number" id="num5">
         5
       </button>
 
-      <button class="button" id="numberSix">
+      <button class="button number" id="num6">
         6
       </button>
 
-      <button class="button" id="subtraction">
+      <button class="button operation" id="subtract">
         <img id="subtractionIcon">
       </button>
 
-      <button class="button" id="numberOne">
+      <button class="button number" id="num1">
         1
       </button>
 
-      <button class="button" id="numberTwo">
+      <button class="button number" id="num2">
         2
       </button>
 
-      <button class="button" id="numberThree">
+      <button class="button number" id="num3">
         3
       </button>
 
-      <button class="button" id="addition">
+      <button class="button operation" id="add">
         <img id="additionIcon">
       </button>
 
-      <button class="button" id="numberZero">
+      <button class="button number" id="num0">
         0
       </button>
 
-      <button class="button" id="point">
+      <button class="button number" id="decimal">
         <img id="pointIcon">
       </button>
 
-      <button class="button" id="delete">
+      <button class="button " id="delete">
         <img id="deleteIcon">
       </button>
 
-      <button class="button" id="equal">
+      <button class="button operation" id="equals">
         <img id="equalIcon">
       </button>
 
@@ -93,6 +93,10 @@
 
   </div>
 
-  <script src="index.ts"></script>
+  <script src="./src/index.ts"></script>
+  <script>
+    let a = document.querySelectorAll(".operation");
+    console.log(a);
+  </script>
 </body>
 </html>

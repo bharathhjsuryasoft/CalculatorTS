@@ -117,79 +117,236 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
-var bundleURL = null;
+})({"src/function.ts":[function(require,module,exports) {
+"use strict";
 
-function getBundleURLCached() {
-  if (!bundleURL) {
-    bundleURL = getBundleURL();
-  }
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.backspaceEvent = exports.operationEvents = exports.numPadEvents = exports.acButtonEvent = void 0;
 
-  return bundleURL;
-}
+var acButtonEvent = function acButtonEvent(acButton, equationField, answerField) {
+  acButton.addEventListener('click', function () {
+    equationField.value = '';
+    answerField.value = '';
+    input = ['', ''];
+    answer = '';
+    numEquation = 0;
+    operation = '';
+    resetFontSize(equationField, answerField);
+  });
+};
 
-function getBundleURL() {
-  // Attempt to find the URL of the current script and use that as the base URL
-  try {
-    throw new Error();
-  } catch (err) {
-    var matches = ('' + err.stack).match(/(https?|file|ftp|chrome-extension|moz-extension):\/\/[^)\n]+/g);
+exports.acButtonEvent = acButtonEvent;
 
-    if (matches) {
-      return getBaseURL(matches[0]);
-    }
-  }
+var numPadEvents = function numPadEvents(numButtons, equationField) {
+  var _loop_1 = function _loop_1(numButton) {
+    numButton.addEventListener('click', function () {
+      if (numButton.id === 'decimal') {
+        //making sure that a number does not have more than 1 decimal
+        if (input[numEquation].indexOf('.') === -1) {
+          input[numEquation] += '.';
+        }
+      } else {
+        input[numEquation] += numButton.id[3];
+      }
 
-  return '/';
-}
+      equationField.value = input[numEquation]; //Decrease the font size depending on the number of digits
 
-function getBaseURL(url) {
-  return ('' + url).replace(/^((?:https?|file|ftp|chrome-extension|moz-extension):\/\/.+)?\/[^/]+(?:\?.*)?$/, '$1') + '/';
-}
-
-exports.getBundleURL = getBundleURLCached;
-exports.getBaseURL = getBaseURL;
-},{}],"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
-var bundle = require('./bundle-url');
-
-function updateLink(link) {
-  var newLink = link.cloneNode();
-
-  newLink.onload = function () {
-    link.remove();
+      equationFontSizeChange = checkDecreaseFontSize(input[numEquation], equationOriginalFontSize);
+      equationField.style.fontSize = "".concat(equationFontSizeChange, "px");
+    });
   };
 
-  newLink.href = link.href.split('?')[0] + '?' + Date.now();
-  link.parentNode.insertBefore(newLink, link.nextSibling);
-}
+  for (var _i = 0, numButtons_1 = numButtons; _i < numButtons_1.length; _i++) {
+    var numButton = numButtons_1[_i];
 
-var cssTimeout = null;
-
-function reloadCSS() {
-  if (cssTimeout) {
-    return;
+    _loop_1(numButton);
   }
+};
 
-  cssTimeout = setTimeout(function () {
-    var links = document.querySelectorAll('link[rel="stylesheet"]');
+exports.numPadEvents = numPadEvents;
 
-    for (var i = 0; i < links.length; i++) {
-      if (bundle.getBaseURL(links[i].href) === bundle.getBundleURL()) {
-        updateLink(links[i]);
+var operationEvents = function operationEvents(operationButtons, equationField, answerField) {
+  var _loop_2 = function _loop_2(operationButton) {
+    operationButton.addEventListener('click', function () {
+      if (numEquation && operationButton.id !== 'equals') {
+        input[0] = evaluate(input[0], input[1], operation);
+        equationField.value = input[0];
+        input[1] = '';
       }
+
+      if (operationButton.id !== 'equals') {
+        numEquation = 1;
+        operation = operationButton.id;
+        equationField.value = '';
+        answerField.value = input[0];
+        resetFontSize(equationField, answerField);
+      } else {
+        displayResults(equationField, answerField);
+      }
+    });
+  };
+
+  for (var _i = 0, operationButtons_1 = operationButtons; _i < operationButtons_1.length; _i++) {
+    var operationButton = operationButtons_1[_i];
+
+    _loop_2(operationButton);
+  }
+};
+
+exports.operationEvents = operationEvents;
+
+var backspaceEvent = function backspaceEvent(backButton, equationField) {
+  backButton.addEventListener('click', function () {
+    //This logic here is to slice the string from starting index
+    //to the length of string - 1
+    //to remove the very last character from the string
+    input[numEquation] = input[numEquation].slice(0, input[numEquation].length - 1); //If the string is already empty then change it's value to '0'
+    //instead of slicing it further
+
+    if (input[numEquation] === '') {
+      input[numEquation] = '0';
     }
 
-    cssTimeout = null;
-  }, 50);
-}
+    equationField.value = input[numEquation];
+  });
+};
 
-module.exports = reloadCSS;
-},{"./bundle-url":"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"style.css":[function(require,module,exports) {
-var reloadCSS = require('_css_loader');
+exports.backspaceEvent = backspaceEvent;
 
-module.hot.dispose(reloadCSS);
-module.hot.accept(reloadCSS);
-},{"./images/Vectors/mod_white.svg":[["mod_white.d9b9962b.svg","images/Vectors/mod_white.svg"],"images/Vectors/mod_white.svg"],"./images/Vectors/div_white.svg":[["div_white.f248fd20.svg","images/Vectors/div_white.svg"],"images/Vectors/div_white.svg"],"./images/Vectors/mul_white.svg":[["mul_white.8d197dd5.svg","images/Vectors/mul_white.svg"],"images/Vectors/mul_white.svg"],"./images/Vectors/sub_white.svg":[["sub_white.29e87f13.svg","images/Vectors/sub_white.svg"],"images/Vectors/sub_white.svg"],"./images/Vectors/add_white.svg":[["add_white.da3c4222.svg","images/Vectors/add_white.svg"],"images/Vectors/add_white.svg"],"./images/Vectors/dot_white.svg":[["dot_white.fdb9e1b3.svg","images/Vectors/dot_white.svg"],"images/Vectors/dot_white.svg"],"./images/Vectors/ce_white.svg":[["ce_white.90a57ee5.svg","images/Vectors/ce_white.svg"],"images/Vectors/ce_white.svg"],"./images/Vectors/equals_white.svg":[["equals_white.ca6edeba.svg","images/Vectors/equals_white.svg"],"images/Vectors/equals_white.svg"],"./images/Vectors/mod_dark.svg":[["mod_dark.d00c28c7.svg","images/Vectors/mod_dark.svg"],"images/Vectors/mod_dark.svg"],"./images/Vectors/div_dark.svg":[["div_dark.aeab8467.svg","images/Vectors/div_dark.svg"],"images/Vectors/div_dark.svg"],"./images/Vectors/mul_dark.svg":[["mul_dark.9d82eae8.svg","images/Vectors/mul_dark.svg"],"images/Vectors/mul_dark.svg"],"./images/Vectors/sub_dark.svg":[["sub_dark.3db74bd6.svg","images/Vectors/sub_dark.svg"],"images/Vectors/sub_dark.svg"],"./images/Vectors/add_dark.svg":[["add_dark.c1b3ecd2.svg","images/Vectors/add_dark.svg"],"images/Vectors/add_dark.svg"],"./images/Vectors/dot_dark.svg":[["dot_dark.8b09ea59.svg","images/Vectors/dot_dark.svg"],"images/Vectors/dot_dark.svg"],"./images/Vectors/ce_dark.svg":[["ce_dark.67d3229e.svg","images/Vectors/ce_dark.svg"],"images/Vectors/ce_dark.svg"],"./images/Vectors/equals_dark.svg":[["equals_dark.b4b7e6b0.svg","images/Vectors/equals_dark.svg"],"images/Vectors/equals_dark.svg"],"_css_loader":"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+var resetFontSize = function resetFontSize(equationField, answerField) {
+  equationFontSizeChange = equationOriginalFontSize;
+  equationField.style.fontSize = "".concat(equationFontSizeChange, "px");
+  ansFontSizeChange = ansOriginalFontSize;
+  answerField.style.fontSize = "".concat(ansOriginalFontSize, "px");
+};
+
+var checkDecreaseFontSize = function checkDecreaseFontSize(displayString, fontSize) {
+  if (displayString.length > maxDigitBeforeSizeChange) {
+    return decreaseFontSize(displayString.length, fontSize);
+  } else {
+    return fontSize;
+  }
+};
+
+var decreaseFontSize = function decreaseFontSize(stringLength, fontSize) {
+  var residualLength = stringLength - maxDigitBeforeSizeChange;
+
+  for (var character = 0; character < residualLength; ++character) {
+    fontSize -= fontSize * percentageDecrease;
+  }
+
+  return fontSize;
+};
+
+var evaluate = function evaluate(num1, num2, operator) {
+  var evalAnswer = num1;
+
+  if (operator) {
+    switch (operator) {
+      case 'add':
+        evalAnswer = String(parseFloat(num1) + parseFloat(num2));
+        break;
+
+      case 'subtract':
+        evalAnswer = String(parseFloat(num1) - parseFloat(num2));
+        break;
+
+      case 'multiply':
+        evalAnswer = String(parseFloat(num1) * parseFloat(num2));
+        break;
+
+      case 'divide':
+        evalAnswer = String(parseFloat(num1) / parseFloat(num2));
+        break;
+
+      case 'modulo':
+        evalAnswer = String(parseInt(num1) % parseInt(num2));
+        break;
+    }
+  }
+
+  return evalAnswer;
+};
+
+var displayResults = function displayResults(equationField, answerField) {
+  //Decrease the font size depending on the number of digits
+  if (input[1] === '') {
+    input[1] = '0';
+  }
+
+  console.log(input[0], input[1]);
+  answer = evaluate(input[0], input[1], operation);
+  var equationFieldString = "".concat(input[0]).concat(operationDict[operation]).concat(input[1]);
+  equationFontSizeChange = checkDecreaseFontSize(equationFieldString, equationOriginalFontSize);
+  equationField.style.fontSize = "".concat(equationFontSizeChange, "px");
+  equationField.value = equationFieldString;
+  ansFontSizeChange = checkDecreaseFontSize(answer, ansOriginalFontSize);
+  answerField.style.fontSize = "".concat(ansFontSizeChange, "px");
+  answerField.value = answer;
+}; //Global Values
+
+
+var equationOriginalFontSize = 60;
+var ansOriginalFontSize = 45;
+var maxDigitBeforeSizeChange = 8;
+var percentageDecrease = 0.1;
+var input = ['', ''];
+var answer = '';
+var numEquation = 0;
+var operation = '';
+var equationFontSizeChange = equationOriginalFontSize;
+var ansFontSizeChange = ansOriginalFontSize;
+var operationDict = {
+  add: '+',
+  subtract: '-',
+  modulo: '%',
+  multiply: 'X',
+  divide: '/'
+};
+},{}],"src/index.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var function_1 = require("./function");
+
+var main = function main() {
+  var elements = getElements();
+  startCalculator(elements);
+};
+
+var getElements = function getElements() {
+  return {
+    equationField: document.querySelector('#equationField'),
+    answerField: document.querySelector('#answerField'),
+    acButton: document.querySelector('#AC'),
+    numButtons: document.querySelectorAll('.number'),
+    operationButtons: document.querySelectorAll('.operation'),
+    backButton: document.querySelector('#delete')
+  };
+};
+
+var startCalculator = function startCalculator(elements) {
+  //Destructuring elements
+  var equationField = elements.equationField,
+      answerField = elements.answerField,
+      acButton = elements.acButton,
+      numButtons = elements.numButtons,
+      operationButtons = elements.operationButtons,
+      backButton = elements.backButton; //Adding Event Listeners for our calculator
+
+  (0, function_1.acButtonEvent)(acButton, equationField, answerField);
+  (0, function_1.numPadEvents)(numButtons, equationField);
+  (0, function_1.operationEvents)(operationButtons, equationField, answerField);
+  (0, function_1.backspaceEvent)(backButton, equationField);
+};
+
+main();
+},{"./function":"src/function.ts"}],"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -393,5 +550,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js"], null)
-//# sourceMappingURL=/style.e308ff8e.js.map
+},{}]},{},["../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","src/index.ts"], null)
+//# sourceMappingURL=/src.f10117fe.js.map
