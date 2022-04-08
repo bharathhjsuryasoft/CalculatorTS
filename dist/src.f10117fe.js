@@ -123,8 +123,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.backspaceEvent = exports.outputEvent = exports.inputEvent = exports.allClearButtonEvent = void 0; //Global Values
-
+exports.backspaceEvent = exports.outputEvent = exports.inputEvent = exports.allClearButtonEvent = void 0;
 var operationDictionary = {
   addition: '+',
   subtraction: '-',
@@ -139,111 +138,63 @@ var ansOriginalFontSize = 45;
 var maxDigitBeforeSizeChange = 8;
 var percentageDecrease = 0.1;
 var equationFontSizeChange = equationOriginalFontSize;
-var ansFontSizeChange = ansOriginalFontSize; // All Clear Function
+var ansFontSizeChange = ansOriginalFontSize;
+var clearScreenFlag = false;
+var count = 0;
 
 var allClearButtonEvent = function allClearButtonEvent(AC, inputScreen, outputScreen) {
-  AC.addEventListener('click', function () {
+  ACeventHandler(AC, inputScreen, outputScreen);
+};
+
+exports.allClearButtonEvent = allClearButtonEvent;
+
+var clearScreen = function clearScreen(inputScreen, outputScreen) {
+  if (clearScreenFlag) {
     inputScreen.value = '';
     outputScreen.value = '';
-  });
-};
+  }
 
-exports.allClearButtonEvent = allClearButtonEvent; // Input Screen Function
+  clearScreenFlag = false;
+};
 
 var inputEvent = function inputEvent(numberButtons, inputScreen, operationButtons, outputScreen) {
-  var _loop_1 = function _loop_1(numberButton) {
-    // Number Input
-    numberButton.addEventListener('click', function () {
-      inputScreen.value += numberButton.id; // Font Size Change
-
-      equationFontSizeChange = checkDecreaseFontSize(inputScreen.value, equationOriginalFontSize);
-      inputScreen.style.fontSize = "".concat(equationFontSizeChange, "px");
-    });
-  };
-
-  for (var _i = 0, numberButtons_1 = numberButtons; _i < numberButtons_1.length; _i++) {
-    var numberButton = numberButtons_1[_i];
-
-    _loop_1(numberButton);
-  }
-
-  var _loop_2 = function _loop_2(operationButton) {
-    operationButton.addEventListener('click', function () {
-      if (operationButton.id !== 'equals') {
-        var temp = inputScreen.value;
-        inputScreen.value += operationDictionary["".concat(operationButton.id)];
-        inputScreen.value = replaceOperatorCheck(inputScreen.value);
-      }
-    });
-  }; // Operator Input
-
-
-  for (var _a = 0, operationButtons_1 = operationButtons; _a < operationButtons_1.length; _a++) {
-    var operationButton = operationButtons_1[_a];
-
-    _loop_2(operationButton);
-  }
+  numberEventHander(numberButtons, inputScreen, outputScreen);
+  operationEventHander(operationButtons, inputScreen, outputScreen);
 };
 
-exports.inputEvent = inputEvent; // Output Screen Function
+exports.inputEvent = inputEvent;
 
 var outputEvent = function outputEvent(inputScreen, operationButtons, outputScreen) {
-  var _loop_3 = function _loop_3(operationButton) {
-    operationButton.addEventListener('click', function () {
-      if (operationButton.id === 'equals') {
-        var expression = inputScreen.value; // Check if any operator is last Character
-
-        if (operationSymbols.indexOf("".concat(expression[expression.length - 1])) !== -1) {
-          return;
-        } // Calculation of the equation
-
-
-        var equation = inputScreen.value;
-        outputScreen.value = eval(equation); // Font Size Change
-
-        ansFontSizeChange = checkDecreaseFontSize(outputScreen.value, ansOriginalFontSize);
-        outputScreen.style.fontSize = "".concat(ansFontSizeChange, "px");
-      }
-    });
-  };
-
-  for (var _i = 0, operationButtons_2 = operationButtons; _i < operationButtons_2.length; _i++) {
-    var operationButton = operationButtons_2[_i];
-
-    _loop_3(operationButton);
-  }
+  outputEventHandler(operationButtons, inputScreen, outputScreen);
 };
 
-exports.outputEvent = outputEvent; // Delete a Character
+exports.outputEvent = outputEvent;
 
 var backspaceEvent = function backspaceEvent(backButton, inputScreen) {
-  backButton.addEventListener('click', function () {
-    inputScreen.value = inputScreen.value.slice(0, inputScreen.value.length - 1);
-  });
+  backspaceEventHandler(backButton, inputScreen);
 };
 
-exports.backspaceEvent = backspaceEvent; // Replace the old Operator with new Operator
+exports.backspaceEvent = backspaceEvent;
 
-var replaceOperatorCheck = function replaceOperatorCheck(temp) {
-  var len = temp.length;
+var replaceOperatorCheck = function replaceOperatorCheck(temporary) {
+  var lengthOfTemporary = temporary.length;
 
-  if (len > 1) {
-    if (operationSymbols.indexOf("".concat(temp[len - 2])) !== -1 && operationSymbols.indexOf("".concat(temp[len - 1])) !== -1) {
+  if (lengthOfTemporary > 1) {
+    if (operationSymbols.indexOf("".concat(temporary[lengthOfTemporary - 2])) !== -1 && operationSymbols.indexOf("".concat(temporary[lengthOfTemporary - 1])) !== -1) {
       var replacedOperator = void 0;
 
-      if (len == 2) {
-        replacedOperator = temp["".concat(len - 1)];
+      if (lengthOfTemporary == 2) {
+        replacedOperator = temporary["".concat(lengthOfTemporary - 1)];
       } else {
-        replacedOperator = temp.slice(0, len - 2) + temp["".concat(len - 1)];
+        replacedOperator = temporary["".concat(lengthOfTemporary - 1)] === '.' ? temporary.slice(0, lengthOfTemporary - 2) + '' : temporary.slice(0, lengthOfTemporary - 2) + temporary["".concat(lengthOfTemporary - 1)];
       }
 
       return replacedOperator;
     }
   }
 
-  return temp;
-}; // Font Size Check Function
-
+  return temporary;
+};
 
 var checkDecreaseFontSize = function checkDecreaseFontSize(displayString, fontSize) {
   if (displayString.length > maxDigitBeforeSizeChange) {
@@ -253,15 +204,103 @@ var checkDecreaseFontSize = function checkDecreaseFontSize(displayString, fontSi
   }
 };
 
-var decreaseFontSize = function decreaseFontSize(stringLength, fontSize) {
-  var residualLength = stringLength - maxDigitBeforeSizeChange;
+var decreaseFontSize = function decreaseFontSize(stringlengthOfTemporarygth, fontSize) {
+  var residuallengthOfTemporarygth = stringlengthOfTemporarygth - maxDigitBeforeSizeChange;
 
-  for (var character = 0; character < residualLength; ++character) {
+  for (var character = 0; character < residuallengthOfTemporarygth; ++character) {
     fontSize -= fontSize * percentageDecrease;
   }
 
   return fontSize;
 };
+
+function backspaceEventHandler(backButton, inputScreen) {
+  backButton.addEventListener('click', function () {
+    inputScreen.value = inputScreen.value.slice(0, inputScreen.value.length - 1);
+  });
+}
+
+function ACeventHandler(AC, inputScreen, outputScreen) {
+  AC.addEventListener('click', function () {
+    inputScreen.value = '';
+    outputScreen.value = '';
+    count = 0;
+  });
+}
+
+function outputEventHandler(operationButtons, inputScreen, outputScreen) {
+  var _loop_1 = function _loop_1(operationButton) {
+    operationButton.addEventListener('click', function () {
+      if (operationButton.id === 'equals') {
+        var expression = inputScreen.value;
+
+        if (operationSymbols.indexOf("".concat(expression[expression.length - 1])) !== -1) {
+          return;
+        }
+
+        var equation = inputScreen.value;
+        outputScreen.value = eval(equation);
+        clearScreenFlag = true;
+        ansFontSizeChange = checkDecreaseFontSize(outputScreen.value, ansOriginalFontSize);
+        outputScreen.style.fontSize = "".concat(ansFontSizeChange, "px");
+      }
+    });
+  };
+
+  for (var _i = 0, operationButtons_1 = operationButtons; _i < operationButtons_1.length; _i++) {
+    var operationButton = operationButtons_1[_i];
+
+    _loop_1(operationButton);
+  }
+}
+
+function operationEventHander(operationButtons, inputScreen, outputScreen) {
+  var _loop_2 = function _loop_2(operationButton) {
+    operationButton.addEventListener('click', function () {
+      clearScreen(inputScreen, outputScreen);
+
+      if (operationButton.id === 'point') {
+        count++;
+
+        if (count === 1) {
+          inputScreen.value += operationDictionary["".concat(operationButton.id)];
+          inputScreen.value = replaceOperatorCheck(inputScreen.value);
+          return;
+        } else if (count === 2) {
+          inputScreen.value += '';
+          inputScreen.value = replaceOperatorCheck(inputScreen.value);
+        }
+      } else if (operationButton.id !== 'equals') {
+        inputScreen.value += operationDictionary["".concat(operationButton.id)];
+        inputScreen.value = replaceOperatorCheck(inputScreen.value);
+        count = 0;
+      }
+    });
+  };
+
+  for (var _i = 0, operationButtons_2 = operationButtons; _i < operationButtons_2.length; _i++) {
+    var operationButton = operationButtons_2[_i];
+
+    _loop_2(operationButton);
+  }
+}
+
+function numberEventHander(numberButtons, inputScreen, outputScreen) {
+  var _loop_3 = function _loop_3(numberButton) {
+    numberButton.addEventListener('click', function () {
+      clearScreen(inputScreen, outputScreen);
+      inputScreen.value += numberButton.id;
+      equationFontSizeChange = checkDecreaseFontSize(inputScreen.value, equationOriginalFontSize);
+      inputScreen.style.fontSize = "".concat(equationFontSizeChange, "px");
+    });
+  };
+
+  for (var _i = 0, numberButtons_1 = numberButtons; _i < numberButtons_1.length; _i++) {
+    var numberButton = numberButtons_1[_i];
+
+    _loop_3(numberButton);
+  }
+}
 },{}],"src/index.ts":[function(require,module,exports) {
 "use strict";
 
@@ -331,7 +370,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49761" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49868" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

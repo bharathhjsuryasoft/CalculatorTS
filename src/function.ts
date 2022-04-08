@@ -1,4 +1,3 @@
-//Global Values
 const operationDictionary: Object = {
   addition: '+',
   subtraction: '-',
@@ -9,123 +8,82 @@ const operationDictionary: Object = {
 };
 
 let operationSymbols = Object.values(operationDictionary);
-
 const equationOriginalFontSize = 60;
 const ansOriginalFontSize = 45;
 const maxDigitBeforeSizeChange = 8;
 const percentageDecrease = 0.1;
-
 let equationFontSizeChange = equationOriginalFontSize;
 let ansFontSizeChange = ansOriginalFontSize;
+let clearScreenFlag: boolean = false;
+let count: number = 0;
 
-// All Clear Function
 export const allClearButtonEvent = (
   AC: Element,
   inputScreen: HTMLInputElement,
   outputScreen: HTMLInputElement
 ): void => {
-  AC.addEventListener('click', () => {
-    inputScreen.value = '';
-    outputScreen.value = '';
-  });
+  ACeventHandler(AC, inputScreen, outputScreen);
 };
 
-// Input Screen Function
+const clearScreen = (
+  inputScreen: HTMLInputElement,
+  outputScreen: HTMLInputElement
+) => {
+  if (clearScreenFlag) {
+    inputScreen.value = '';
+    outputScreen.value = '';
+  }
+  clearScreenFlag = false;
+};
+
 export const inputEvent = (
   numberButtons: NodeListOf<Element>,
   inputScreen: HTMLInputElement,
   operationButtons: NodeListOf<Element>,
   outputScreen: HTMLInputElement
 ): void => {
-  for (let numberButton of numberButtons) {
-    // Number Input
-    numberButton.addEventListener('click', () => {
-      inputScreen.value += numberButton.id;
-      // Font Size Change
-      equationFontSizeChange = checkDecreaseFontSize(
-        inputScreen.value,
-        equationOriginalFontSize
-      );
-      inputScreen.style.fontSize = `${equationFontSizeChange}px`;
-    });
-  }
-  // Operator Input
-  for (let operationButton of operationButtons) {
-    operationButton.addEventListener('click', () => {
-      if (operationButton.id !== 'equals') {
-        let temp: string = inputScreen.value;
-        inputScreen.value += operationDictionary[`${operationButton.id}`];
-        inputScreen.value = replaceOperatorCheck(inputScreen.value);
-      }
-    });
-  }
+  numberEventHander(numberButtons, inputScreen, outputScreen);
+  operationEventHander(operationButtons, inputScreen, outputScreen);
 };
 
-// Output Screen Function
 export const outputEvent = (
   inputScreen: HTMLInputElement,
   operationButtons: NodeListOf<Element>,
   outputScreen: HTMLInputElement
 ): void => {
-  for (let operationButton of operationButtons) {
-    operationButton.addEventListener('click', () => {
-      if (operationButton.id === 'equals') {
-        let expression: string = inputScreen.value;
-        // Check if any operator is last Character
-        if (
-          operationSymbols.indexOf(`${expression[expression.length - 1]}`) !==
-          -1
-        ) {
-          return;
-        }
-        // Calculation of the equation
-        let equation: string = inputScreen.value;
-        outputScreen.value = eval(equation);
-        // Font Size Change
-        ansFontSizeChange = checkDecreaseFontSize(
-          outputScreen.value,
-          ansOriginalFontSize
-        );
-        outputScreen.style.fontSize = `${ansFontSizeChange}px`;
-      }
-    });
-  }
+  outputEventHandler(operationButtons, inputScreen, outputScreen);
 };
 
-// Delete a Character
 export const backspaceEvent = (
   backButton: Element,
   inputScreen: HTMLInputElement
 ): void => {
-  backButton.addEventListener('click', () => {
-    inputScreen.value = inputScreen.value.slice(
-      0,
-      inputScreen.value.length - 1
-    );
-  });
+  backspaceEventHandler(backButton, inputScreen);
 };
 
-// Replace the old Operator with new Operator
-const replaceOperatorCheck = (temp: string): string => {
-  let len: number = temp.length;
-  if (len > 1) {
+const replaceOperatorCheck = (temporary: string): string => {
+  let lengthOfTemporary: number = temporary.length;
+  if (lengthOfTemporary > 1) {
     if (
-      operationSymbols.indexOf(`${temp[len - 2]}`) !== -1 &&
-      operationSymbols.indexOf(`${temp[len - 1]}`) !== -1
+      operationSymbols.indexOf(`${temporary[lengthOfTemporary - 2]}`) !== -1 &&
+      operationSymbols.indexOf(`${temporary[lengthOfTemporary - 1]}`) !== -1
     ) {
       let replacedOperator: string;
-      if (len == 2) {
-        replacedOperator = temp[`${len - 1}`];
+      if (lengthOfTemporary == 2) {
+        replacedOperator = temporary[`${lengthOfTemporary - 1}`];
       } else {
-        replacedOperator = temp.slice(0, len - 2) + temp[`${len - 1}`];
+        replacedOperator =
+          temporary[`${lengthOfTemporary - 1}`] === '.'
+            ? temporary.slice(0, lengthOfTemporary - 2) + ''
+            : temporary.slice(0, lengthOfTemporary - 2) +
+              temporary[`${lengthOfTemporary - 1}`];
       }
       return replacedOperator;
     }
   }
-  return temp;
+  return temporary;
 };
 
-// Font Size Check Function
 const checkDecreaseFontSize = (
   displayString: string,
   fontSize: number
@@ -137,12 +95,115 @@ const checkDecreaseFontSize = (
   }
 };
 
-const decreaseFontSize = (stringLength: number, fontSize: number): number => {
-  const residualLength = stringLength - maxDigitBeforeSizeChange;
-
-  for (let character = 0; character < residualLength; ++character) {
+const decreaseFontSize = (
+  stringlengthOfTemporarygth: number,
+  fontSize: number
+): number => {
+  const residuallengthOfTemporarygth =
+    stringlengthOfTemporarygth - maxDigitBeforeSizeChange;
+  for (
+    let character = 0;
+    character < residuallengthOfTemporarygth;
+    ++character
+  ) {
     fontSize -= fontSize * percentageDecrease;
   }
-
   return fontSize;
 };
+
+function backspaceEventHandler(
+  backButton: Element,
+  inputScreen: HTMLInputElement
+) {
+  backButton.addEventListener('click', () => {
+    inputScreen.value = inputScreen.value.slice(
+      0,
+      inputScreen.value.length - 1
+    );
+  });
+}
+
+function ACeventHandler(
+  AC: Element,
+  inputScreen: HTMLInputElement,
+  outputScreen: HTMLInputElement
+) {
+  AC.addEventListener('click', () => {
+    inputScreen.value = '';
+    outputScreen.value = '';
+    count = 0;
+  });
+}
+
+function outputEventHandler(
+  operationButtons: NodeListOf<Element>,
+  inputScreen: HTMLInputElement,
+  outputScreen: HTMLInputElement
+) {
+  for (let operationButton of operationButtons) {
+    operationButton.addEventListener('click', () => {
+      if (operationButton.id === 'equals') {
+        let expression: string = inputScreen.value;
+        if (
+          operationSymbols.indexOf(`${expression[expression.length - 1]}`) !==
+          -1
+        ) {
+          return;
+        }
+        let equation: string = inputScreen.value;
+        outputScreen.value = eval(equation);
+        clearScreenFlag = true;
+        ansFontSizeChange = checkDecreaseFontSize(
+          outputScreen.value,
+          ansOriginalFontSize
+        );
+        outputScreen.style.fontSize = `${ansFontSizeChange}px`;
+      }
+    });
+  }
+}
+
+function operationEventHander(
+  operationButtons: NodeListOf<Element>,
+  inputScreen: HTMLInputElement,
+  outputScreen: HTMLInputElement
+) {
+  for (let operationButton of operationButtons) {
+    operationButton.addEventListener('click', () => {
+      clearScreen(inputScreen, outputScreen);
+      if (operationButton.id === 'point') {
+        count++;
+        if (count === 1) {
+          inputScreen.value += operationDictionary[`${operationButton.id}`];
+          inputScreen.value = replaceOperatorCheck(inputScreen.value);
+          return;
+        } else if (count === 2) {
+          inputScreen.value += '';
+          inputScreen.value = replaceOperatorCheck(inputScreen.value);
+        }
+      } else if (operationButton.id !== 'equals') {
+        inputScreen.value += operationDictionary[`${operationButton.id}`];
+        inputScreen.value = replaceOperatorCheck(inputScreen.value);
+        count = 0;
+      }
+    });
+  }
+}
+
+function numberEventHander(
+  numberButtons: NodeListOf<Element>,
+  inputScreen: HTMLInputElement,
+  outputScreen: HTMLInputElement
+) {
+  for (let numberButton of numberButtons) {
+    numberButton.addEventListener('click', () => {
+      clearScreen(inputScreen, outputScreen);
+      inputScreen.value += numberButton.id;
+      equationFontSizeChange = checkDecreaseFontSize(
+        inputScreen.value,
+        equationOriginalFontSize
+      );
+      inputScreen.style.fontSize = `${equationFontSizeChange}px`;
+    });
+  }
+}

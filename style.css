@@ -18,10 +18,6 @@ body {
 
 }
 
-/* ========================== */
-/*         Color Theme        */
-/* ========================== */
-
 :root {
   --light-primary-color: #ffffff;
   --light-result-color: #e1efff;
@@ -41,71 +37,59 @@ body {
 
 }
 
-
 @media (prefers-color-scheme: dark) {
   .container{
     background-color: var(--dark-primary-color);
   }
-
   .container_screen{
     background: var(--dark-result-color);
   }
-
   .screen{
     background-color: var(--dark-result-color);
     color: var(--dark-input-color);
   }
-
   .outputscreen{
     background-color: var(--dark-result-color);
     color: var(--dark-output-color);
   }
-
   .button{
     background-color: var(--dark-number-color);
     color: var(--dark-text-color);
   }
-
   #AC {
     background: var(--dark-clear-color);
     color: var(--dark-text-color);
   }
-  
   #modulusIcon{
     content: url('./images/Vectors/mod_white.svg');
     margin-top: 5%;
     width: 34%;
     height: 38%;
   }
-
   #divisionIcon{
     content: url('./images/Vectors/div_white.svg');
     margin-top: 5%;
     width: 34%;
     height: 34%;
   }
-  
   #multiplicationIcon{
     content: url('./images/Vectors/mul_white.svg');
     margin-top: 5%;
     width: 30%;
     height: 30%;
   }
-
   #subtractionIcon{
     content: url('./images/Vectors/sub_white.svg');
     margin-top: 5%;
     width: 30%;
     height: 38%;
   }
-
   #additionIcon{
     content: url('./images/Vectors/add_white.svg');
     margin-top: 5%;
     width: 30%;
     height: 38%;
   }
-
   #pointIcon{
     content: url('./images/Vectors/dot_white.svg');
     margin-top: 5%;
@@ -119,107 +103,86 @@ body {
     width: 40%;
     height: 40%;
   }
-
   #equalIcon{
     content: url('./images/Vectors/equals_white.svg');
     margin-top: 5%;
     width: 30%;
     height: 30%;
   }
-
 }
 
 @media (prefers-color-scheme: light) {
   .container{
     background-color: var(--light-primary-color);
   }
-
   .container_screen{
     background: var(--light-result-color);
   }
-
   .screen{
     background-color: var(--light-result-color);
     color: var(--light-input-color);
   }
-
   .outputscreen{
     background-color: var(--light-result-color);;
     color: var(--light-output-color);
   }
-
   .button{
     background-color: var(--light-number-color);
     color: var(--light-text-color);
   }
-
   #AC{
     background: var(--light-clear-color);
     color: var(--light-text-color);
   }
-
   #modulusIcon{
     content: url('./images/Vectors/mod_dark.svg');
     margin-top: 5%;
     width: 38%;
     height: 38%;
   }
-
   #divisionIcon{
     content: url('./images/Vectors/div_dark.svg');
     margin-top: 5%;
     width: 38%;
     height: 38%;
   }
-
   #multiplicationIcon{
     content: url('./images/Vectors/mul_dark.svg');
     margin-top: 5%;
     width: 34%;
     height: 34%;
   }
-
   #subtractionIcon{
     content: url('./images/Vectors/sub_dark.svg');
     margin-top: 5%;
     width: 34%;
     height: 38%;
   }
-
   #additionIcon{
     content: url('./images/Vectors/add_dark.svg');
     margin-top: 5%;
     width: 38%;
     height: 38%;
   }
-
   #pointIcon{
     content: url('./images/Vectors/dot_dark.svg');
     margin-top: 5%;
     width: 12%;
     height: 12%;
   }
-
   #deleteIcon{
     content: url('./images/Vectors/ce_dark.svg');
     margin-top: 5%;
     width: 38%;
     height: 38%;
   }
-
   #equalIcon{
     content: url('./images/Vectors/equals_dark.svg');
     margin-top: 5%;
     width: 38%;
     height: 38%;
   }
-
 }
-
-
-/* ========================== */
-/*          Container         */
-/* ========================== */
 
 .container {
   display: flex;
@@ -263,10 +226,6 @@ body {
   padding-right: 5%;
   letter-spacing: 0.1em;
 }
-
-/* ========================== */
-/*           Buttons          */
-/* ========================== */
 
 .contrainer_button{
   display: flex;

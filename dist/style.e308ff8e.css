@@ -18,10 +18,6 @@ body {
 
 }
 
-/* ========================== */
-/*         Color Theme        */
-/* ========================== */
-
 :root {
   --light-primary-color: #ffffff;
   --light-result-color: #e1efff;
@@ -41,71 +37,59 @@ body {
 
 }
 
-
 @media (prefers-color-scheme: dark) {
   .container{
     background-color: var(--dark-primary-color);
   }
-
   .container_screen{
     background: var(--dark-result-color);
   }
-
   .screen{
     background-color: var(--dark-result-color);
     color: var(--dark-input-color);
   }
-
   .outputscreen{
     background-color: var(--dark-result-color);
     color: var(--dark-output-color);
   }
-
   .button{
     background-color: var(--dark-number-color);
     color: var(--dark-text-color);
   }
-
   #AC {
     background: var(--dark-clear-color);
     color: var(--dark-text-color);
   }
-  
   #modulusIcon{
     content: url('/mod_white.d9b9962b.svg');
     margin-top: 5%;
     width: 34%;
     height: 38%;
   }
-
   #divisionIcon{
     content: url('/div_white.f248fd20.svg');
     margin-top: 5%;
     width: 34%;
     height: 34%;
   }
-  
   #multiplicationIcon{
     content: url('/mul_white.8d197dd5.svg');
     margin-top: 5%;
     width: 30%;
     height: 30%;
   }
-
   #subtractionIcon{
     content: url('/sub_white.29e87f13.svg');
     margin-top: 5%;
     width: 30%;
     height: 38%;
   }
-
   #additionIcon{
     content: url('/add_white.da3c4222.svg');
     margin-top: 5%;
     width: 30%;
     height: 38%;
   }
-
   #pointIcon{
     content: url('/dot_white.fdb9e1b3.svg');
     margin-top: 5%;
@@ -119,107 +103,86 @@ body {
     width: 40%;
     height: 40%;
   }
-
   #equalIcon{
     content: url('/equals_white.ca6edeba.svg');
     margin-top: 5%;
     width: 30%;
     height: 30%;
   }
-
 }
 
 @media (prefers-color-scheme: light) {
   .container{
     background-color: var(--light-primary-color);
   }
-
   .container_screen{
     background: var(--light-result-color);
   }
-
   .screen{
     background-color: var(--light-result-color);
     color: var(--light-input-color);
   }
-
   .outputscreen{
     background-color: var(--light-result-color);;
     color: var(--light-output-color);
   }
-
   .button{
     background-color: var(--light-number-color);
     color: var(--light-text-color);
   }
-
   #AC{
     background: var(--light-clear-color);
     color: var(--light-text-color);
   }
-
   #modulusIcon{
     content: url('/mod_dark.d00c28c7.svg');
     margin-top: 5%;
     width: 38%;
     height: 38%;
   }
-
   #divisionIcon{
     content: url('/div_dark.aeab8467.svg');
     margin-top: 5%;
     width: 38%;
     height: 38%;
   }
-
   #multiplicationIcon{
     content: url('/mul_dark.9d82eae8.svg');
     margin-top: 5%;
     width: 34%;
     height: 34%;
   }
-
   #subtractionIcon{
     content: url('/sub_dark.3db74bd6.svg');
     margin-top: 5%;
     width: 34%;
     height: 38%;
   }
-
   #additionIcon{
     content: url('/add_dark.c1b3ecd2.svg');
     margin-top: 5%;
     width: 38%;
     height: 38%;
   }
-
   #pointIcon{
     content: url('/dot_dark.8b09ea59.svg');
     margin-top: 5%;
     width: 12%;
     height: 12%;
   }
-
   #deleteIcon{
     content: url('/ce_dark.67d3229e.svg');
     margin-top: 5%;
     width: 38%;
     height: 38%;
   }
-
   #equalIcon{
     content: url('/equals_dark.b4b7e6b0.svg');
     margin-top: 5%;
     width: 38%;
     height: 38%;
   }
-
 }
-
-
-/* ========================== */
-/*          Container         */
-/* ========================== */
 
 .container {
   display: flex;
@@ -263,10 +226,6 @@ body {
   padding-right: 5%;
   letter-spacing: 0.1em;
 }
-
-/* ========================== */
-/*           Buttons          */
-/* ========================== */
 
 .contrainer_button{
   display: flex;
