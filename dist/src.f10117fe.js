@@ -123,104 +123,127 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.backspaceEvent = exports.operationEvents = exports.numPadEvents = exports.acButtonEvent = void 0;
+exports.backspaceEvent = exports.outputEvent = exports.inputEvent = exports.allClearButtonEvent = void 0; //Global Values
 
-var acButtonEvent = function acButtonEvent(acButton, equationField, answerField) {
-  acButton.addEventListener('click', function () {
-    equationField.value = '';
-    answerField.value = '';
-    input = ['', ''];
-    answer = '';
-    numEquation = 0;
-    operation = '';
-    resetFontSize(equationField, answerField);
+var operationDictionary = {
+  addition: '+',
+  subtraction: '-',
+  modulus: '%',
+  multiplication: '*',
+  division: '/',
+  point: '.'
+};
+var operationSymbols = Object.values(operationDictionary);
+var equationOriginalFontSize = 60;
+var ansOriginalFontSize = 45;
+var maxDigitBeforeSizeChange = 8;
+var percentageDecrease = 0.1;
+var equationFontSizeChange = equationOriginalFontSize;
+var ansFontSizeChange = ansOriginalFontSize; // All Clear Function
+
+var allClearButtonEvent = function allClearButtonEvent(AC, inputScreen, outputScreen) {
+  AC.addEventListener('click', function () {
+    inputScreen.value = '';
+    outputScreen.value = '';
   });
 };
 
-exports.acButtonEvent = acButtonEvent;
+exports.allClearButtonEvent = allClearButtonEvent; // Input Screen Function
 
-var numPadEvents = function numPadEvents(numButtons, equationField) {
-  var _loop_1 = function _loop_1(numButton) {
-    numButton.addEventListener('click', function () {
-      if (numButton.id === 'decimal') {
-        //making sure that a number does not have more than 1 decimal
-        if (input[numEquation].indexOf('.') === -1) {
-          input[numEquation] += '.';
-        }
-      } else {
-        input[numEquation] += numButton.id[3];
-      }
+var inputEvent = function inputEvent(numberButtons, inputScreen, operationButtons, outputScreen) {
+  var _loop_1 = function _loop_1(numberButton) {
+    // Number Input
+    numberButton.addEventListener('click', function () {
+      inputScreen.value += numberButton.id; // Font Size Change
 
-      equationField.value = input[numEquation]; //Decrease the font size depending on the number of digits
-
-      equationFontSizeChange = checkDecreaseFontSize(input[numEquation], equationOriginalFontSize);
-      equationField.style.fontSize = "".concat(equationFontSizeChange, "px");
+      equationFontSizeChange = checkDecreaseFontSize(inputScreen.value, equationOriginalFontSize);
+      inputScreen.style.fontSize = "".concat(equationFontSizeChange, "px");
     });
   };
 
-  for (var _i = 0, numButtons_1 = numButtons; _i < numButtons_1.length; _i++) {
-    var numButton = numButtons_1[_i];
+  for (var _i = 0, numberButtons_1 = numberButtons; _i < numberButtons_1.length; _i++) {
+    var numberButton = numberButtons_1[_i];
 
-    _loop_1(numButton);
+    _loop_1(numberButton);
   }
-};
 
-exports.numPadEvents = numPadEvents;
-
-var operationEvents = function operationEvents(operationButtons, equationField, answerField) {
   var _loop_2 = function _loop_2(operationButton) {
     operationButton.addEventListener('click', function () {
-      if (numEquation && operationButton.id !== 'equals') {
-        input[0] = evaluate(input[0], input[1], operation);
-        equationField.value = input[0];
-        input[1] = '';
-      }
-
       if (operationButton.id !== 'equals') {
-        numEquation = 1;
-        operation = operationButton.id;
-        equationField.value = '';
-        answerField.value = input[0];
-        resetFontSize(equationField, answerField);
-      } else {
-        displayResults(equationField, answerField);
+        var temp = inputScreen.value;
+        inputScreen.value += operationDictionary["".concat(operationButton.id)];
+        inputScreen.value = replaceOperatorCheck(inputScreen.value);
       }
     });
-  };
+  }; // Operator Input
 
-  for (var _i = 0, operationButtons_1 = operationButtons; _i < operationButtons_1.length; _i++) {
-    var operationButton = operationButtons_1[_i];
+
+  for (var _a = 0, operationButtons_1 = operationButtons; _a < operationButtons_1.length; _a++) {
+    var operationButton = operationButtons_1[_a];
 
     _loop_2(operationButton);
   }
 };
 
-exports.operationEvents = operationEvents;
+exports.inputEvent = inputEvent; // Output Screen Function
 
-var backspaceEvent = function backspaceEvent(backButton, equationField) {
+var outputEvent = function outputEvent(inputScreen, operationButtons, outputScreen) {
+  var _loop_3 = function _loop_3(operationButton) {
+    operationButton.addEventListener('click', function () {
+      if (operationButton.id === 'equals') {
+        var expression = inputScreen.value; // Check if any operator is last Character
+
+        if (operationSymbols.indexOf("".concat(expression[expression.length - 1])) !== -1) {
+          return;
+        } // Calculation of the equation
+
+
+        var equation = inputScreen.value;
+        outputScreen.value = eval(equation); // Font Size Change
+
+        ansFontSizeChange = checkDecreaseFontSize(outputScreen.value, ansOriginalFontSize);
+        outputScreen.style.fontSize = "".concat(ansFontSizeChange, "px");
+      }
+    });
+  };
+
+  for (var _i = 0, operationButtons_2 = operationButtons; _i < operationButtons_2.length; _i++) {
+    var operationButton = operationButtons_2[_i];
+
+    _loop_3(operationButton);
+  }
+};
+
+exports.outputEvent = outputEvent; // Delete a Character
+
+var backspaceEvent = function backspaceEvent(backButton, inputScreen) {
   backButton.addEventListener('click', function () {
-    //This logic here is to slice the string from starting index
-    //to the length of string - 1
-    //to remove the very last character from the string
-    input[numEquation] = input[numEquation].slice(0, input[numEquation].length - 1); //If the string is already empty then change it's value to '0'
-    //instead of slicing it further
-
-    if (input[numEquation] === '') {
-      input[numEquation] = '0';
-    }
-
-    equationField.value = input[numEquation];
+    inputScreen.value = inputScreen.value.slice(0, inputScreen.value.length - 1);
   });
 };
 
-exports.backspaceEvent = backspaceEvent;
+exports.backspaceEvent = backspaceEvent; // Replace the old Operator with new Operator
 
-var resetFontSize = function resetFontSize(equationField, answerField) {
-  equationFontSizeChange = equationOriginalFontSize;
-  equationField.style.fontSize = "".concat(equationFontSizeChange, "px");
-  ansFontSizeChange = ansOriginalFontSize;
-  answerField.style.fontSize = "".concat(ansOriginalFontSize, "px");
-};
+var replaceOperatorCheck = function replaceOperatorCheck(temp) {
+  var len = temp.length;
+
+  if (len > 1) {
+    if (operationSymbols.indexOf("".concat(temp[len - 2])) !== -1 && operationSymbols.indexOf("".concat(temp[len - 1])) !== -1) {
+      var replacedOperator = void 0;
+
+      if (len == 2) {
+        replacedOperator = temp["".concat(len - 1)];
+      } else {
+        replacedOperator = temp.slice(0, len - 2) + temp["".concat(len - 1)];
+      }
+
+      return replacedOperator;
+    }
+  }
+
+  return temp;
+}; // Font Size Check Function
+
 
 var checkDecreaseFontSize = function checkDecreaseFontSize(displayString, fontSize) {
   if (displayString.length > maxDigitBeforeSizeChange) {
@@ -239,72 +262,6 @@ var decreaseFontSize = function decreaseFontSize(stringLength, fontSize) {
 
   return fontSize;
 };
-
-var evaluate = function evaluate(num1, num2, operator) {
-  var evalAnswer = num1;
-
-  if (operator) {
-    switch (operator) {
-      case 'add':
-        evalAnswer = String(parseFloat(num1) + parseFloat(num2));
-        break;
-
-      case 'subtract':
-        evalAnswer = String(parseFloat(num1) - parseFloat(num2));
-        break;
-
-      case 'multiply':
-        evalAnswer = String(parseFloat(num1) * parseFloat(num2));
-        break;
-
-      case 'divide':
-        evalAnswer = String(parseFloat(num1) / parseFloat(num2));
-        break;
-
-      case 'modulo':
-        evalAnswer = String(parseInt(num1) % parseInt(num2));
-        break;
-    }
-  }
-
-  return evalAnswer;
-};
-
-var displayResults = function displayResults(equationField, answerField) {
-  //Decrease the font size depending on the number of digits
-  if (input[1] === '') {
-    input[1] = '0';
-  }
-
-  console.log(input[0], input[1]);
-  answer = evaluate(input[0], input[1], operation);
-  var equationFieldString = "".concat(input[0]).concat(operationDict[operation]).concat(input[1]);
-  equationFontSizeChange = checkDecreaseFontSize(equationFieldString, equationOriginalFontSize);
-  equationField.style.fontSize = "".concat(equationFontSizeChange, "px");
-  equationField.value = equationFieldString;
-  ansFontSizeChange = checkDecreaseFontSize(answer, ansOriginalFontSize);
-  answerField.style.fontSize = "".concat(ansFontSizeChange, "px");
-  answerField.value = answer;
-}; //Global Values
-
-
-var equationOriginalFontSize = 60;
-var ansOriginalFontSize = 45;
-var maxDigitBeforeSizeChange = 8;
-var percentageDecrease = 0.1;
-var input = ['', ''];
-var answer = '';
-var numEquation = 0;
-var operation = '';
-var equationFontSizeChange = equationOriginalFontSize;
-var ansFontSizeChange = ansOriginalFontSize;
-var operationDict = {
-  add: '+',
-  subtract: '-',
-  modulo: '%',
-  multiply: 'X',
-  divide: '/'
-};
 },{}],"src/index.ts":[function(require,module,exports) {
 "use strict";
 
@@ -321,10 +278,10 @@ var main = function main() {
 
 var getElements = function getElements() {
   return {
-    equationField: document.querySelector('#equationField'),
-    answerField: document.querySelector('#answerField'),
-    acButton: document.querySelector('#AC'),
-    numButtons: document.querySelectorAll('.number'),
+    inputScreen: document.querySelector('#inputScreen'),
+    outputScreen: document.querySelector('#outputScreen'),
+    AC: document.querySelector('#AC'),
+    numberButtons: document.querySelectorAll('.number'),
     operationButtons: document.querySelectorAll('.operation'),
     backButton: document.querySelector('#delete')
   };
@@ -332,17 +289,17 @@ var getElements = function getElements() {
 
 var startCalculator = function startCalculator(elements) {
   //Destructuring elements
-  var equationField = elements.equationField,
-      answerField = elements.answerField,
-      acButton = elements.acButton,
-      numButtons = elements.numButtons,
+  var inputScreen = elements.inputScreen,
+      outputScreen = elements.outputScreen,
+      AC = elements.AC,
+      numberButtons = elements.numberButtons,
       operationButtons = elements.operationButtons,
-      backButton = elements.backButton; //Adding Event Listeners for our calculator
+      backButton = elements.backButton; //Events
 
-  (0, function_1.acButtonEvent)(acButton, equationField, answerField);
-  (0, function_1.numPadEvents)(numButtons, equationField);
-  (0, function_1.operationEvents)(operationButtons, equationField, answerField);
-  (0, function_1.backspaceEvent)(backButton, equationField);
+  (0, function_1.allClearButtonEvent)(AC, inputScreen, outputScreen);
+  (0, function_1.inputEvent)(numberButtons, inputScreen, operationButtons, outputScreen);
+  (0, function_1.outputEvent)(inputScreen, operationButtons, outputScreen);
+  (0, function_1.backspaceEvent)(backButton, inputScreen);
 };
 
 main();
@@ -374,7 +331,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54688" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49761" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

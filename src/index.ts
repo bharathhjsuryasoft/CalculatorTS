@@ -1,45 +1,43 @@
 import {
-  acButtonEvent,
-  numPadEvents,
-  operationEvents,
+  allClearButtonEvent,
+  inputEvent,
+  outputEvent,
   backspaceEvent,
 } from './function';
-import { webpageElements } from './userInterface';
+import { calculatorElements } from './userInterface';
 
 const main = (): void => {
   const elements = getElements();
   startCalculator(elements);
 };
 
-const getElements = (): webpageElements => {
+const getElements = (): calculatorElements => {
   return {
-      equationField: <HTMLInputElement>(
-          document.querySelector('#equationField')
-      ),
-      answerField: <HTMLInputElement>document.querySelector('#answerField'),
-      acButton: <Element>document.querySelector('#AC'),
-      numButtons: document.querySelectorAll('.number'),
-      operationButtons: document.querySelectorAll('.operation'),
-      backButton: <Element>document.querySelector('#delete'),
+    inputScreen: <HTMLInputElement>document.querySelector('#inputScreen'),
+    outputScreen: <HTMLInputElement>document.querySelector('#outputScreen'),
+    AC: <Element>document.querySelector('#AC'),
+    numberButtons: document.querySelectorAll('.number'),
+    operationButtons: document.querySelectorAll('.operation'),
+    backButton: <Element>document.querySelector('#delete'),
   };
 };
 
-const startCalculator = (elements: webpageElements): void => {
+const startCalculator = (elements: calculatorElements): void => {
   //Destructuring elements
   const {
-      equationField,
-      answerField,
-      acButton,
-      numButtons,
-      operationButtons,
-      backButton,
+    inputScreen,
+    outputScreen,
+    AC,
+    numberButtons,
+    operationButtons,
+    backButton,
   } = elements;
 
-  //Adding Event Listeners for our calculator
-  acButtonEvent(acButton, equationField, answerField);
-  numPadEvents(numButtons, equationField);
-  operationEvents(operationButtons, equationField, answerField);
-  backspaceEvent(backButton, equationField);
+  //Events
+  allClearButtonEvent(AC, inputScreen, outputScreen);
+  inputEvent(numberButtons, inputScreen, operationButtons, outputScreen);
+  outputEvent(inputScreen, operationButtons, outputScreen);
+  backspaceEvent(backButton, inputScreen);
 };
 
 main();
